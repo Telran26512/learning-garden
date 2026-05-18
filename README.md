@@ -12,6 +12,10 @@ This repository is the source of truth for architecture, roadmap, conventions, d
 | [`learning-garden-web`](https://github.com/Telran26512/learning-garden-web) | Next.js frontend application |
 | [`learning-garden-server`](https://github.com/Telran26512/learning-garden-server) | Go backend server and REST API |
 
+## Prototype Preview
+
+- [Open the prototype preview](https://telran26512.github.io/learning-garden/prototype/)
+
 ## Document Map
 
 Start with the core docs in this order:
@@ -43,6 +47,8 @@ learning-garden/
 |   |   `-- ai-learning-garden-requirements-analysis.docx
 |   `-- references/
 |       `-- rl-infrastructure-learning-plan-revised-zh.md
+|-- prototype/
+|   `-- avatar.jpg
 |-- .gitattributes
 |-- .gitignore
 `-- README.md
