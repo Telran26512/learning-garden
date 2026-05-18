@@ -13,7 +13,7 @@
 - **形态**:完整社区(共享内容 + 评论 + 讨论 + 协作)。
 - **策略**:先小范围(自己 + 朋友)起步,架构预留公开注册的接缝。
 
-完整功能规划见外部文档 `ai_learning_website_feature_plan.md`。本 `docs/` 是落地为工程的架构与规范文档。
+完整需求分析见 [requirements/ai-learning-garden-requirements-analysis.docx](./requirements/ai-learning-garden-requirements-analysis.docx)。本 `docs/` 是落地为工程的架构与规范文档。
 
 ## 2. 文档导航
 

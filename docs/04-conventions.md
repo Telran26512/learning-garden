@@ -16,11 +16,15 @@ learning-garden/
 │   ├── 02-tech-stack.md
 │   ├── 03-roadmap.md
 │   ├── 04-conventions.md
-│   └── 05-data-model.md
+│   ├── 05-data-model.md
+│   ├── requirements/             # 需求分析、产品交付文档等二进制文档
+│   └── references/               # 学习计划、外部资料整理等参考文档
 └── README.md                     # 跨仓入口、本地联调说明索引
 ```
 
 职责:维护架构、路线图、规范、数据模型、跨仓联调说明和 API 契约引用。不放应用源码。
+
+`docs/superpowers/` 属于本地 agent 工作流产物,不作为项目正式文档提交。
 
 ### 1.2 `learning-garden-web`
 

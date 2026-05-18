@@ -42,3 +42,6 @@ __pycache__/
 # Local git worktrees
 .worktrees/
 worktrees/
+
+# Local agent workflow artifacts
+docs/superpowers/
