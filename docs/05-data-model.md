@@ -203,7 +203,11 @@ PK `(follower_id, followee_id)`;`CHECK (follower_id <> followee_id)`。索引两
   - `task_checks(user_id, task_id, checked, updated_at)`。
   - `review_cards(id, user_id, concept_id, front, back, ease, interval_days, due_date, last_reviewed_at)`——SM-2 状态。
 - **media**:`assets(id, owner_id, kind, storage_key, filename, content_type, size, created_at)`;文件本体在对象存储,库里只存元数据。
-- **moderation**(M6):`reports(id, reporter_id, target_type, target_id, reason, status, created_at)` 及管理操作日志。
+- **moderation / 后台管理系统**:
+  - `reports(id, reporter_id, target_type, target_id, reason, status, created_at, resolved_at, resolved_by)`。
+  - `admin_actions(id, admin_id, action, target_type, target_id, reason, metadata, created_at)`。
+  - `platform_settings(key, value, updated_by, updated_at)`——用于开放注册开关、防滥用阈值等轻量平台配置。
+  - 后台管理系统不直接拥有内容表或用户表;它通过 `identity`、`content`、`social` 的 service 接口执行管理动作,并在 `admin_actions` 里留痕。
 - **relation**:无独立表,查询第 3 节的边表派生正反向链接。
 
 ---
@@ -217,5 +221,12 @@ PK `(follower_id, followee_id)`;`CHECK (follower_id <> followee_id)`。索引两
 | 评论/讨论 | 须登录;只能删自己的(或 admin) |
 | 关注 | 须登录;不能关注自己 |
 | 管理操作 | 仅 `role='admin'` |
+
+后台管理操作必须同时满足两点:
+
+1. 当前会话用户 `role='admin'`。
+2. 管理动作写入 `admin_actions`,记录管理员、目标、动作、原因和时间。
+
+前端隐藏按钮不算授权;数据库 repository 也不承担授权。授权集中在 service 层。
 
 授权一律在 service 层判定,不在 handler、不在 repository(见 [04-conventions.md](./04-conventions.md) 4.2)。

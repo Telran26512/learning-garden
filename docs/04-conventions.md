@@ -34,7 +34,7 @@ learning-garden-web/
 │   ├── (community)/              # 社区:发现、浏览他人、讨论、用户主页
 │   ├── (workspace)/              # 登录后:我的学习空间(8 个学习模块)
 │   ├── (studio)/                 # 创作:上传/编辑自己的内容
-│   └── (admin)/                  # 管理员:审核(M6)
+│   └── (admin)/                  # 后台管理系统:举报、审核、用户与开放注册控制
 ├── features/                     # L4 各功能模块,一模块一目录,互不 import
 ├── lib/api/                      # L3 唯一与后端通信的客户端层,按后端领域组织
 ├── runtime/                      # L2 Pyodide 等能力,接口隔离
@@ -44,6 +44,8 @@ learning-garden-web/
 ```
 
 `web` 仓只通过 REST 契约和 API base URL 访问后端,不得依赖 `api` 仓源码。浏览器侧 API 地址使用 `NEXT_PUBLIC_API_BASE_URL`;服务端组件或 server action 如需直接调用后端,使用服务端专用环境变量。
+
+后台管理系统不单独拆仓、不单独拆应用。它属于 `learning-garden-web` 的 `(admin)` 路由组和 `features/admin` 模块,通过路由层鉴权与普通用户端隔离。
 
 ### 1.3 `learning-garden-server`
 
@@ -72,10 +74,11 @@ learning-garden-server/
 | 位置 | 允许 import | 禁止 |
 | --- | --- | --- |
 | `features/*` (L4) | `lib/api`、`components`、`runtime` | **其他 `features/*`**;直接发 HTTP |
+| `features/admin` (L4 管理端) | `lib/api`、`components` | 直接访问普通功能模块内部实现;直接发 HTTP;绕过权限提示 |
 | `lib/api` (L3) | 仅类型 | `features`、`app` |
 | `runtime` (L2) | 自包含 | `features` |
 
-最关键:`features/concepts` 不得 import `features/papers`——模块互不认识,跨模块跳转只用 `next/link` + URL。
+最关键:`features/concepts` 不得 import `features/papers`——模块互不认识,跨模块跳转只用 `next/link` + URL。`features/admin` 是后台管理系统的视图聚合层,可以展示跨领域管理信息,但只能通过 `lib/api` 调用后端管理端点,不能 import 用户端 feature 内部组件来复用业务逻辑。
 
 ### 2.2 api —— `depguard` 模块依赖 DAG
 
@@ -108,15 +111,17 @@ learning-garden-server/
 - **TypeScript strict**,禁用 `any`。
 - **RSC 默认**:组件默认 Server Component,仅在需交互时加 `'use client'` 并下推到叶子。
 - 鉴权在路由层((studio)/(admin) route group)统一拦截,不在组件里散判。
+- 后台管理系统所有页面必须在 `(admin)` 路由层校验管理员身份;组件内部可以做展示兜底,但不能把它当作唯一权限控制。
 - 不写"以后可能用到"的代码(YAGNI);三处重复才考虑抽象。
 
 ### 4.2 后端 Go
 
 - 每个领域模块内分 `handler` / `service` / `repository` / `domain` 四层,依赖单向向下。
-- **授权判定一律在 `service` 层**:任何写操作先校验 `owner_id`;任何读操作按 `visibility` 过滤。handler 不做、repository 不做。
+- **授权判定一律在 `service` 层**:任何写操作先校验 `owner_id`;任何读操作按 `visibility` 过滤;任何后台管理操作必须校验 `role='admin'`。handler 不做、repository 不做。
 - repository 用 `sqlc` 生成的类型安全代码;SQL 写在 `queries/`。
 - 错误处理:领域错误在 `platform` 定义统一类型,handler 统一转 HTTP 状态码。
 - 不在领域模块里 import 别的模块的 repository/domain(见 2.2)。
+- 后台管理能力优先放在 `moderation` service 或被管理模块暴露的管理 service 接口里;禁止后台代码直接跨模块查表。
 
 ## 5. 内容与数据规范
 
@@ -148,6 +153,7 @@ learning-garden-server/
 
 - `web` 仓: `lint`(含 import 边界)+ `typecheck` + 前端测试 + `lib/api` mock 后端测试。
 - `api` 仓: `gofmt` / `golangci-lint` + `depguard`(模块 DAG)+ `go test` + 数据库迁移校验 + REST 契约校验。
+- 后台管理系统测试:至少覆盖非管理员不能进入 `/admin`、非管理员不能调用管理写接口、管理员操作会产生管理操作日志。
 - 文档仓:Markdown 链接与结构检查(可后置),并维护跨仓联调说明。
 
 任一代码仓 CI 失败都阻止对应仓库合并——这是架构红线不腐化的保证。跨仓 E2E 测试 M2 后再引入,优先覆盖注册登录、创建并浏览内容、运行代码、完成复习。
