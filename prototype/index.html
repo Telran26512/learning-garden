@@ -21,6 +21,13 @@
   .navtab.active::after { content:''; display:block; height:2px; background:#176b38; border-radius:2px; margin-top:13px; }
   textarea { resize:none; }
   .inp { border:1px solid #e8eaec; border-radius:7px; }
+  .focus-ring:focus-visible { outline:2px solid #176b38; outline-offset:2px; }
+  .num { font-variant-numeric: tabular-nums; }
+  .code-scroll { max-height:420px; overflow:auto; overscroll-behavior:contain; tab-size:2; }
+  .code-scroll::-webkit-scrollbar { width:6px; height:6px; }
+  .code-scroll::-webkit-scrollbar-thumb { background:#334155; border-radius:6px; }
+  .code-scroll::-webkit-scrollbar-track { background:#0f172a; }
+  .studio-editor { min-height:clamp(420px, calc(100vh - 380px), 680px); }
 </style>
 </head>
 <body class="font-sans text-[13px] leading-normal">
@@ -62,55 +69,101 @@
 <!-- ============================================================ -->
 <section id="screen-workspace" class="screen flex gap-7 py-6 min-h-[calc(100vh-52px)]">
   <!-- 侧边栏 -->
-  <aside class="w-[176px] shrink-0 border-r hair pr-5">
+  <aside class="w-[184px] shrink-0 border-r hair pr-5">
     <nav class="space-y-0.5 text-[13px]">
-      <a class="block px-2.5 py-1.5 rounded-md bg-garden-50 text-garden-700 font-medium">学习空间</a>
-      <a class="block px-2.5 py-1.5 rounded-md text-slate-600 hover:bg-slate-50">Roadmap</a>
-      <a class="block px-2.5 py-1.5 rounded-md text-slate-600 hover:bg-slate-50">Concepts</a>
-      <a class="block px-2.5 py-1.5 rounded-md text-slate-600 hover:bg-slate-50">Papers</a>
-      <a class="block px-2.5 py-1.5 rounded-md text-slate-600 hover:bg-slate-50">Experiments</a>
-      <a data-goto="review" class="block px-2.5 py-1.5 rounded-md text-slate-600 hover:bg-slate-50 cursor-pointer">Review</a>
-      <a class="block px-2.5 py-1.5 rounded-md text-slate-600 hover:bg-slate-50">Portfolio</a>
+      <a class="block px-2.5 py-1.5 rounded-md bg-garden-50 text-garden-700 font-medium">今日训练</a>
+      <a class="block px-2.5 py-1.5 rounded-md text-slate-600 hover:bg-slate-50">训练路线</a>
+      <a class="block px-2.5 py-1.5 rounded-md text-slate-600 hover:bg-slate-50">实现题库</a>
+      <a class="block px-2.5 py-1.5 rounded-md text-slate-600 hover:bg-slate-50">错题回放</a>
+      <a class="block px-2.5 py-1.5 rounded-md text-slate-600 hover:bg-slate-50">训练档案</a>
     </nav>
     <div class="mt-4 pt-4 border-t hair">
-      <div class="sect-label mb-1">学习时间 · 本周</div>
-      <div class="text-[18px] font-bold">12<span class="text-[12px] font-medium">h</span> 46<span class="text-[12px] font-medium">m</span>
-        <span class="text-[11px] font-medium text-garden-600">+18%</span></div>
-      <div class="flex items-end gap-1 h-9 mt-2">
-        <div class="flex-1 bg-garden-200 rounded-sm" style="height:40%"></div>
-        <div class="flex-1 bg-garden-200 rounded-sm" style="height:65%"></div>
-        <div class="flex-1 bg-garden-200 rounded-sm" style="height:30%"></div>
-        <div class="flex-1 bg-garden-500 rounded-sm" style="height:90%"></div>
-        <div class="flex-1 bg-garden-500 rounded-sm" style="height:75%"></div>
-        <div class="flex-1 bg-garden-200 rounded-sm" style="height:55%"></div>
-        <div class="flex-1 bg-slate-100 rounded-sm" style="height:20%"></div>
+      <div class="sect-label mb-1">今日节奏</div>
+      <div class="text-[22px] font-bold num">1<span class="text-[12px] font-medium">/3</span>
+        <span class="text-[11px] font-medium text-garden-600 ml-1.5">已完成一个训练块</span></div>
+      <div class="mt-3 space-y-2 text-[12px]">
+        <div class="flex items-center justify-between"><span class="text-slate-500">推导预热</span><span class="font-medium text-garden-700">完成</span></div>
+        <div class="flex items-center justify-between"><span class="text-slate-500">代码实现题</span><span class="font-medium text-amber-700">进行中</span></div>
+        <div class="flex items-center justify-between"><span class="text-slate-500">错因回放</span><span class="text-slate-400">待开始</span></div>
       </div>
-      <div class="flex justify-between text-[9px] text-slate-300 mt-1"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
-      <button class="mt-2.5 w-full bg-garden-600 hover:bg-garden-700 transition text-white rounded-md py-1.5 text-[12px]">+ 记录学习</button>
+      <button class="mt-4 w-full bg-garden-600 hover:bg-garden-700 transition text-white rounded-md py-2 text-[12px] focus-ring">继续当前训练</button>
     </div>
   </aside>
 
   <!-- 主区 -->
   <div class="flex-1 min-w-0">
-    <div class="flex items-center justify-between flex-wrap gap-y-2">
-      <div class="flex items-center divide-x divide-slate-200">
-        <div class="pr-4"><span class="text-slate-500">总体进度</span><span class="font-semibold ml-1.5">62%</span><span class="text-garden-600 ml-1">▲8%</span></div>
-        <div class="px-4"><span class="text-slate-500">掌握概念</span><span class="font-semibold ml-1.5">28<span class="text-slate-400 font-normal">/45</span></span></div>
-        <div class="px-4"><span class="text-slate-500">完成实验</span><span class="font-semibold ml-1.5">16</span></div>
-        <div class="px-4"><span class="text-slate-500">公开内容</span><span class="font-semibold ml-1.5">8</span></div>
-        <div class="pl-4"><span class="text-slate-500">🔥 连续</span><span class="font-semibold ml-1">12 天</span></div>
+    <div class="flex items-end justify-between flex-wrap gap-x-6 gap-y-3 pb-5 border-b hair">
+      <div>
+        <div class="sect-label">今天的目标不是看进度,而是完成一个完整训练闭环</div>
+        <h1 class="text-[24px] font-bold mt-1">先推导,再实现,最后拿反馈</h1>
       </div>
-      <button data-goto="studio" class="bg-garden-600 hover:bg-garden-700 transition text-white font-medium rounded-md px-3.5 py-1.5">+ 新建内容</button>
+      <div class="flex items-center divide-x divide-slate-200 text-[12px]">
+        <div class="pr-4"><span class="text-slate-500">主题</span><span class="font-semibold ml-1.5">线性回归</span></div>
+        <div class="px-4"><span class="text-slate-500">实现题通过</span><span class="font-semibold ml-1.5 num">7/10</span></div>
+        <div class="pl-4"><span class="text-slate-500">待纠错</span><span class="font-semibold ml-1.5 num">3</span></div>
+      </div>
     </div>
 
-    <div class="mt-6 pt-5 border-t hair">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-x-8 gap-y-5 py-5 border-b hair">
+      <div class="lg:col-span-7">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="text-[11px] font-medium bg-garden-600 text-white rounded px-2 py-1">今日主训练</span>
+          <span class="text-[11px] text-slate-400">Stage 2 · 线性模型与回归</span>
+        </div>
+        <h2 class="text-[22px] font-bold leading-tight">实现带偏置项的最小二乘解,并解释正规方程为什么成立</h2>
+        <p class="text-[13px] text-slate-600 mt-2 max-w-[68ch]">这一轮训练先用 3 步推导确认公式来源,然后实现 <code class="bg-slate-100 rounded px-1">linear_regression(X, y)</code>,最后对照参考解看你是否遗漏偏置列、矩阵维度或数值稳定性。</p>
+        <div class="flex flex-wrap gap-2 mt-4">
+          <a data-goto="concept" class="bg-garden-600 hover:bg-garden-700 transition text-white font-medium rounded-md px-4 py-2 cursor-pointer focus-ring">开始实现题</a>
+          <a data-goto="concept" class="border hair hover:bg-slate-50 transition rounded-md px-4 py-2 cursor-pointer focus-ring">先看推导要点</a>
+          <a data-goto="review" class="border hair hover:bg-slate-50 transition rounded-md px-4 py-2 cursor-pointer focus-ring">回看上次错误</a>
+        </div>
+        <div class="mt-5 pt-4 border-t hair">
+          <div class="flex items-baseline justify-between mb-3">
+            <h3 class="text-[14px] font-semibold">公式到代码对照</h3>
+            <span class="sect-label">提交前先核对这三处</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-x-5 gap-y-3 text-[12px]">
+            <div>
+              <div class="sect-label mb-1">矩阵扩展</div>
+              <div class="font-mono bg-slate-50 border-y hair px-2 py-1.5">X_b = [1, X]</div>
+              <p class="text-slate-500 mt-1">把截距项转成第一列常数。</p>
+            </div>
+            <div>
+              <div class="sect-label mb-1">正规方程</div>
+              <div class="font-mono bg-slate-50 border-y hair px-2 py-1.5">w = (X_b.T X_b)^-1 X_b.T y</div>
+              <p class="text-slate-500 mt-1">检查转置和乘法顺序。</p>
+            </div>
+            <div>
+              <div class="sect-label mb-1">结果解释</div>
+              <div class="font-mono bg-slate-50 border-y hair px-2 py-1.5">w[0] = b, w[1:] = coef</div>
+              <p class="text-slate-500 mt-1">输出要能对应截距和系数。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="lg:col-span-5 lg:border-l hair lg:pl-8">
+        <div class="sect-label mb-2">本轮步骤</div>
+        <div class="space-y-2.5 text-[13px]">
+          <div class="grid grid-cols-[22px_1fr] gap-2"><span class="w-5 h-5 rounded bg-garden-600 text-white text-[11px] flex items-center justify-center">1</span><span><b>推导预热</b><br /><span class="text-slate-500 text-[12px]">确认目标函数、求导结果和正规方程。</span></span></div>
+          <div class="grid grid-cols-[22px_1fr] gap-2"><span class="w-5 h-5 rounded bg-amber-100 text-amber-800 text-[11px] flex items-center justify-center">2</span><span><b>代码实现</b><br /><span class="text-slate-500 text-[12px]">补全偏置项并输出参数向量。</span></span></div>
+          <div class="grid grid-cols-[22px_1fr] gap-2"><span class="w-5 h-5 rounded bg-slate-100 text-slate-500 text-[11px] flex items-center justify-center">3</span><span><b>反馈复盘</b><br /><span class="text-slate-500 text-[12px]">记录错误原因,安排下次回放。</span></span></div>
+        </div>
+        <div class="mt-4 pt-4 border-t hair">
+          <div class="text-[11px] text-slate-400">上次卡住的点</div>
+          <div class="text-[15px] font-semibold mt-1">漏掉偏置列,代码默认拟合过原点。</div>
+          <p class="text-[12px] text-slate-500 mt-2">这次提交前先检查 <code class="bg-slate-100 rounded px-1">X_b = np.c_[np.ones(...), X]</code> 是否补上。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="py-6 border-b hair">
       <div class="flex items-baseline justify-between mb-3">
-        <h2 class="text-[14px] font-semibold">学习打卡</h2>
-        <span class="sect-label">过去一年 <span id="totalDays" class="text-slate-700 font-medium"></span> 天有学习记录</span>
+        <h2 class="text-[16px] font-semibold">训练日历</h2>
+        <span class="sect-label">过去一年 <span id="totalDays" class="text-slate-700 font-medium"></span> 天有训练记录</span>
       </div>
       <div class="flex gap-2">
         <div class="flex flex-col justify-between pt-[18px] pb-[2px] text-[10px] text-slate-400 shrink-0"><span>一</span><span>三</span><span>五</span></div>
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto mx-auto">
           <div id="months" class="flex text-[10px] text-slate-400 mb-1 h-[14px]"></div>
           <div id="heatmap" class="flex gap-[3px]"></div>
         </div>
@@ -123,36 +176,27 @@
       </div>
     </div>
 
-    <div class="mt-5 pt-5 border-t hair grid grid-cols-1 lg:grid-cols-12 gap-x-9 gap-y-6">
-      <div class="lg:col-span-7">
-        <div class="flex items-baseline justify-between mb-2.5">
-          <h2 class="text-[14px] font-semibold">当前任务</h2>
-          <span class="sect-label">Stage 2 · 线性模型与回归 · Week 3/4</span>
-        </div>
-        <div class="flex items-center gap-3 mb-1">
-          <span class="text-[14px] font-medium flex-1">推导最小二乘法的矩阵解</span>
-          <a data-goto="concept" class="text-[12px] text-garden-600 font-medium whitespace-nowrap hover:underline cursor-pointer">继续学习 →</a>
-        </div>
-        <p class="text-slate-500 text-[12px] mb-2">从代价函数出发,推导 ŵ = (XᵀX)⁻¹Xᵀy,并理解其几何意义。</p>
-        <div class="flex items-center gap-2.5">
-          <div class="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-garden-600 rounded-full" style="width:60%"></div></div>
-          <span class="text-[11px] text-slate-400">60%</span>
-        </div>
-        <div class="flex items-baseline justify-between mt-6 mb-2">
-          <h2 class="text-[14px] font-semibold">学习路线</h2>
-          <span class="sect-label">3 / 7 已完成 · <a class="text-garden-600 hover:underline cursor-pointer">完整路线</a></span>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-x-8 gap-y-6 pt-5">
+      <div class="lg:col-span-4">
+        <div class="flex items-baseline justify-between mb-3">
+          <h2 class="text-[15px] font-semibold">本周训练路线</h2>
+          <span class="sect-label">当前</span>
         </div>
         <div id="route"></div>
       </div>
-      <div class="lg:col-span-5">
-        <div class="flex items-center justify-between pb-3 mb-3 border-b hair">
-          <div><div class="text-[14px] font-semibold">今日复习</div><div class="text-[12px] text-slate-500 mt-0.5">6 张卡片到期待复习</div></div>
-          <a data-goto="review" class="text-[12px] bg-amber-100 hover:bg-amber-200 transition text-amber-800 font-medium rounded-md px-3 py-1.5 cursor-pointer">开始复习</a>
+
+      <div class="lg:col-span-4 lg:border-l hair lg:pl-8">
+        <div class="flex items-center justify-between mb-3">
+          <div><div class="text-[15px] font-semibold">下一个训练块</div><div class="text-[12px] text-slate-500 mt-0.5">先做一道实现题,再拿即时反馈</div></div>
+          <a data-goto="review" class="text-[12px] bg-amber-100 hover:bg-amber-200 transition text-amber-800 font-medium rounded-md px-3 py-1.5 cursor-pointer focus-ring">开始纠错</a>
         </div>
-        <h2 class="text-[14px] font-semibold mb-2">今日计划</h2>
-        <div id="todo" class="mb-5"></div>
-        <div class="flex items-baseline justify-between mb-2 pt-4 border-t hair">
-          <h2 class="text-[14px] font-semibold">最近概念</h2><span class="sect-label"><a class="text-garden-600 hover:underline cursor-pointer">全部</a></span>
+        <h2 class="text-[15px] font-semibold mb-2">今日计划</h2>
+        <div id="todo"></div>
+      </div>
+
+      <div class="lg:col-span-4 lg:border-l hair lg:pl-8">
+        <div class="flex items-baseline justify-between mb-3">
+          <h2 class="text-[15px] font-semibold">最近训练主题</h2><span class="sect-label"><a class="text-garden-600 hover:underline cursor-pointer">全部</a></span>
         </div>
         <div id="recent"></div>
       </div>
@@ -164,24 +208,39 @@
 <!-- 创作 Studio -->
 <!-- ============================================================ -->
 <section id="screen-studio" class="screen hidden py-6">
-  <div class="flex items-center justify-between pb-4 border-b hair">
-    <div class="text-[13px]"><span class="text-slate-400">← 创作 / </span><span class="font-semibold text-[14px]">新建内容</span></div>
+  <div class="flex items-start justify-between gap-5 pb-4 border-b hair">
+    <div>
+      <div class="text-[13px]"><span class="text-slate-400">← 创作 / </span><span class="font-semibold text-[14px]">新建训练内容</span></div>
+      <p class="text-[12px] text-slate-500 mt-1">把推导、代码和错因复盘组织成一条可训练内容。</p>
+    </div>
     <div class="flex items-center gap-2">
-      <button class="border hair hover:bg-slate-50 transition rounded-md px-3.5 py-1.5 text-[12px]">保存草稿</button>
-      <button class="bg-garden-600 hover:bg-garden-700 transition text-white font-medium rounded-md px-4 py-1.5 text-[12px]">发布 ▾</button>
+      <button class="border hair hover:bg-slate-50 transition rounded-md px-3.5 py-1.5 text-[12px] focus-ring">保存草稿</button>
+      <button class="bg-garden-600 hover:bg-garden-700 transition text-white font-medium rounded-md px-4 py-1.5 text-[12px] focus-ring">发布 ▾</button>
     </div>
   </div>
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-x-9 pt-5">
+  <div class="py-4 border-b hair">
+    <div class="sect-label mb-2">内容模板</div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-x-7 gap-y-3 text-[12px]">
+      <button class="text-left border-l-2 border-garden-600 pl-3 py-1 focus-ring">
+        <span class="block text-garden-700 font-semibold">数学推导</span>
+        <span class="text-slate-500">公式来源、关键变形、实现提醒。</span>
+      </button>
+      <button class="text-left border-l-2 hair pl-3 py-1 text-slate-500 hover:text-slate-700 focus-ring">
+        <span class="block font-semibold">可运行代码</span>
+        <span>函数签名、测试样例、参考输出。</span>
+      </button>
+      <button class="text-left border-l-2 hair pl-3 py-1 text-slate-500 hover:text-slate-700 focus-ring">
+        <span class="block font-semibold">论文笔记</span>
+        <span>论文片段、概念映射、引用来源。</span>
+      </button>
+    </div>
+  </div>
+  <div class="grid grid-cols-1 lg:grid-cols-[250px_minmax(0,1fr)_230px] gap-x-8 gap-y-7 pt-5">
     <!-- 表单 -->
-    <div class="lg:col-span-4 lg:border-r hair lg:pr-9 space-y-4">
+    <aside class="lg:border-r hair lg:pr-8 space-y-4">
       <div>
         <label class="sect-label block mb-1.5">标题 *</label>
-        <input value="线性回归:最小二乘推导与实现" class="inp w-full px-2.5 py-1.5 text-[13px] focus:outline-none focus:border-garden-600" />
-      </div>
-      <div>
-        <label class="sect-label block mb-1.5">Slug</label>
-        <input value="linear-regression-ols" class="inp w-full px-2.5 py-1.5 text-[13px] focus:outline-none focus:border-garden-600" />
-        <p class="text-[11px] text-slate-400 mt-1">/<span class="text-slate-500">raymond</span>/concepts/linear-regression-ols</p>
+        <textarea rows="2" class="inp w-full px-2.5 py-1.5 text-[13px] focus:outline-none focus:border-garden-600">线性回归:最小二乘推导与实现</textarea>
       </div>
       <div>
         <label class="sect-label block mb-1.5">标签</label>
@@ -192,15 +251,11 @@
           <span class="border hair border-dashed rounded px-2 py-0.5 text-[12px] text-slate-400">+ 添加</span>
         </div>
       </div>
-      <div class="grid grid-cols-2 gap-3">
-        <div><label class="sect-label block mb-1.5">阶段</label><div class="inp px-2.5 py-1.5 text-[12px] text-slate-600">Stage 2 ▾</div></div>
-        <div><label class="sect-label block mb-1.5">周次</label><div class="inp px-2.5 py-1.5 text-[12px] text-slate-600">Week 3 ▾</div></div>
-      </div>
       <div>
         <label class="sect-label block mb-1.5">可见性</label>
         <div class="flex gap-1.5 text-[12px]">
-          <button class="flex-1 inp py-1.5 text-slate-600">🔒 私有</button>
-          <button class="flex-1 bg-garden-50 border border-garden-600 text-garden-700 font-medium rounded-md py-1.5">🌐 公开</button>
+          <button class="flex-1 inp py-1.5 text-slate-600 focus-ring">🔒 私有</button>
+          <button class="flex-1 bg-garden-50 border border-garden-600 text-garden-700 font-medium rounded-md py-1.5 focus-ring">🌐 公开</button>
         </div>
       </div>
       <div>
@@ -212,21 +267,35 @@
           <div class="flex justify-between py-1.5"><span>关联实验</span><span class="text-garden-600 cursor-pointer">+ 添加</span></div>
         </div>
       </div>
-    </div>
+      <details class="pt-4 border-t hair text-[12px]">
+        <summary class="cursor-pointer text-slate-500 hover:text-slate-700">高级设置</summary>
+        <div class="mt-3 space-y-3">
+          <div>
+            <label class="sect-label block mb-1.5">Slug</label>
+            <input value="linear-regression-ols" class="inp w-full px-2.5 py-1.5 text-[13px] focus:outline-none focus:border-garden-600" />
+            <p class="text-[11px] text-slate-400 mt-1">/raymond/concepts/linear-regression-ols</p>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div><label class="sect-label block mb-1.5">阶段</label><div class="inp px-2.5 py-1.5 text-[12px] text-slate-600">Stage 2 ▾</div></div>
+            <div><label class="sect-label block mb-1.5">周次</label><div class="inp px-2.5 py-1.5 text-[12px] text-slate-600">Week 3 ▾</div></div>
+          </div>
+        </div>
+      </details>
+    </aside>
     <!-- 编辑器 -->
-    <div class="lg:col-span-8 mt-6 lg:mt-0">
+    <div class="min-w-0">
       <div class="flex items-center gap-5 border-b hair mb-3 text-[13px]">
         <button class="pb-2 border-b-2 border-garden-600 text-garden-700 font-medium -mb-px">编辑</button>
         <button class="pb-2 text-slate-500">预览</button>
         <div class="flex-1"></div>
-        <div class="flex gap-3 text-[12px] text-slate-400 pb-2">
-          <span class="text-garden-600">● 数学推导</span><span>○ 可运行代码</span><span>○ 论文笔记</span>
-        </div>
+        <span class="text-[11px] text-slate-400 pb-2">已自动保存草稿 · 38 秒前</span>
       </div>
-      <div class="flex items-center gap-3 text-slate-400 text-[13px] inp rounded-b-none px-3 py-1.5 bg-slate-50">
-        <b>H</b><b>B</b><i>I</i><span>&lt;/&gt;</span><span>≡</span><span>“”</span><span>{ }</span><span>∑</span><span>🔗</span><span>🖼</span>
+      <div class="flex items-center gap-0 text-slate-500 text-[12px] inp rounded-b-none bg-slate-50 overflow-hidden">
+        <div class="flex items-center gap-2 px-3 py-1.5 border-r hair"><span class="text-slate-400">文本</span><b>H</b><b>B</b><i>I</i><span>“”</span></div>
+        <div class="flex items-center gap-2 px-3 py-1.5 border-r hair"><span class="text-slate-400">结构</span><span>≡</span><span>&lt;/&gt;</span><span>{ }</span></div>
+        <div class="flex items-center gap-2 px-3 py-1.5"><span class="text-slate-400">插入</span><span>∑ 公式</span><span>🔗</span><span>🖼</span></div>
       </div>
-      <textarea rows="15" class="inp rounded-t-none w-full px-3 py-2.5 text-[13px] font-mono focus:outline-none">## 最小二乘推导
+      <textarea class="studio-editor inp rounded-t-none w-full px-3 py-2.5 text-[13px] font-mono leading-6 focus:outline-none focus:border-garden-600">## 最小二乘推导
 
 给定线性模型 ŷ = Xw + ε,最小二乘的目标是最小化残差平方和:
 
@@ -245,8 +314,38 @@ $$ XᵀXw = Xᵀy  ⟹  ŵ = (XᵀX)⁻¹Xᵀy $$
 ## 几何意义
 
 最小二乘寻找使得预测 Xŵ 在列空间中最接近观测值 y 的投影。</textarea>
-      <p class="text-[11px] text-slate-400 mt-1.5">支持 Markdown 与 KaTeX · 已自动保存草稿</p>
+      <p class="text-[11px] text-slate-400 mt-1.5">支持 Markdown 与 KaTeX · 长内容会在编辑区内滚动,不会挤乱页面</p>
     </div>
+    <aside class="lg:border-l hair lg:pl-8 text-[12px]">
+      <div class="pb-4 border-b hair">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-[14px] font-semibold">发布检查</h3>
+          <span class="text-garden-700 font-medium">5/6</span>
+        </div>
+        <div class="space-y-2.5">
+          <div class="flex gap-2"><span class="text-garden-600">✓</span><span>标题和标签已填写</span></div>
+          <div class="flex gap-2"><span class="text-garden-600">✓</span><span>包含最小必要数学推导</span></div>
+          <div class="flex gap-2"><span class="text-garden-600">✓</span><span>公式可用 KaTeX 渲染</span></div>
+          <div class="flex gap-2"><span class="text-garden-600">✓</span><span>已关联前置概念</span></div>
+          <div class="flex gap-2"><span class="text-garden-600">✓</span><span>可见性设置为公开</span></div>
+          <div class="flex gap-2 text-amber-700"><span>!</span><span>还缺一个可运行代码块</span></div>
+        </div>
+      </div>
+      <div class="py-4 border-b hair">
+        <h3 class="text-[14px] font-semibold mb-3">内容结构</h3>
+        <div class="space-y-2 text-slate-600">
+          <div class="flex justify-between"><span>最小二乘推导</span><span class="text-garden-600">当前</span></div>
+          <div class="flex justify-between"><span>几何意义</span><span class="text-slate-400">已写</span></div>
+          <div class="flex justify-between"><span>代码实现</span><span class="text-amber-700">缺失</span></div>
+          <div class="flex justify-between"><span>错因提醒</span><span class="text-slate-400">待补</span></div>
+        </div>
+      </div>
+      <div class="pt-4">
+        <h3 class="text-[14px] font-semibold mb-2">建议下一步</h3>
+        <p class="text-slate-500 leading-relaxed">在推导后补一个 <code class="bg-slate-100 rounded px-1">linear_regression(X, y)</code> 代码块,并说明为什么要添加偏置列。</p>
+        <button class="mt-3 w-full border hair hover:bg-slate-50 transition rounded-md py-1.5 text-garden-700 font-medium focus-ring">插入代码任务模板</button>
+      </div>
+    </aside>
   </div>
 </section>
 
@@ -254,46 +353,91 @@ $$ XᵀXw = Xᵀy  ⟹  ŵ = (XᵀX)⁻¹Xᵀy $$
 <!-- 概念详情 Concept -->
 <!-- ============================================================ -->
 <section id="screen-concept" class="screen hidden py-6">
-  <div class="text-[12px] text-slate-400 mb-1.5">概念 / raymond / 线性回归</div>
-  <div class="flex items-start justify-between gap-4">
-    <div class="flex items-baseline gap-2 flex-wrap">
-      <h1 class="text-[19px] font-bold">线性回归</h1>
-      <span class="text-slate-400 text-[13px]">Linear Regression</span>
-      <span class="bg-slate-100 rounded px-1.5 py-0.5 text-[11px]">统计学习</span>
-      <span class="bg-slate-100 rounded px-1.5 py-0.5 text-[11px]">线性模型</span>
+  <div class="text-[12px] text-slate-400 mb-1.5">训练主题 / raymond / 线性回归</div>
+  <div class="flex items-start justify-between gap-4 flex-wrap">
+    <div>
+      <div class="flex items-baseline gap-2 flex-wrap">
+        <h1 class="text-[28px] font-bold">线性回归实现训练</h1>
+        <span class="text-slate-400 text-[13px]">Linear Regression Drill</span>
+      </div>
+      <p class="text-[13px] text-slate-600 mt-2 max-w-[72ch]">这里不是概念百科,而是一条完整训练链路: 先用最少的数学推导确认公式来源,再写出带偏置项的最小二乘实现,最后用可运行反馈检查理解是否真的落到代码里。</p>
     </div>
     <div class="flex items-center gap-2 shrink-0">
-      <button data-goto="review" class="border hair hover:bg-slate-50 transition rounded-md px-3 py-1.5 text-[12px]">加入复习</button>
-      <button data-goto="studio" class="border hair hover:bg-slate-50 transition rounded-md px-3 py-1.5 text-[12px]">✎ 编辑</button>
+      <button data-goto="review" class="border hair hover:bg-slate-50 transition rounded-md px-3 py-1.5 text-[12px] focus-ring">加入纠错队列</button>
+      <button data-goto="studio" class="border hair hover:bg-slate-50 transition rounded-md px-3 py-1.5 text-[12px] focus-ring">✎ 编辑素材</button>
     </div>
   </div>
-  <div class="flex items-center flex-wrap gap-x-4 gap-y-1 mt-2 pb-4 border-b hair text-[12px] text-slate-500">
-    <span>Stage 2 · Week 3</span>
-    <span class="text-garden-600">● 公开</span>
-    <span>反向链接 <b class="text-slate-700">12</b> 处</span>
-    <span>关联:<a class="text-garden-600 hover:underline cursor-pointer">多元线性回归</a> · <a class="text-garden-600 hover:underline cursor-pointer">最小二乘法</a> · <a class="text-garden-600 hover:underline cursor-pointer">梯度下降法</a></span>
+  <div class="mt-5 grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-3 border-y hair py-4">
+    <div>
+      <div class="sect-label">训练目标</div>
+      <div class="text-[15px] font-semibold mt-1">写对正规方程实现</div>
+      <p class="text-[12px] text-slate-500 mt-1">输出参数向量,并正确处理截距项。</p>
+    </div>
+    <div class="md:border-l hair md:pl-8">
+      <div class="sect-label">先懂什么</div>
+      <div class="text-[15px] font-semibold mt-1">为什么要补偏置列</div>
+      <p class="text-[12px] text-slate-500 mt-1">理解截距项和矩阵形式之间的转换关系。</p>
+    </div>
+    <div class="md:border-l hair md:pl-8">
+      <div class="sect-label">完成标准</div>
+      <div class="text-[15px] font-semibold mt-1">能解释错因</div>
+      <p class="text-[12px] text-slate-500 mt-1">不仅写出代码,还要说清楚为什么上次写错。</p>
+    </div>
   </div>
-  <div class="grid grid-cols-1 lg:grid-cols-12 mt-5">
-    <div class="lg:col-span-5 lg:pr-7 lg:border-r hair">
-      <h3 class="text-[13px] font-semibold mb-3">数学推导</h3>
-      <div class="space-y-2.5 text-[13px]">
-        <p class="text-slate-600">最小二乘目标:</p>
-        <div class="bg-slate-50 rounded-md px-3 py-2.5 font-serif italic text-center">J(w) = ‖y − Xw‖²₂</div>
-        <p class="text-slate-600">求导并令导数为 0:</p>
-        <div class="bg-slate-50 rounded-md px-3 py-2.5 font-serif italic text-center">−2Xᵀ(y − Xw) = 0</div>
-        <p class="text-slate-600">正规方程:</p>
-        <div class="bg-slate-50 rounded-md px-3 py-2.5 font-serif italic text-center">XᵀXw = Xᵀy</div>
-        <p class="text-slate-600">解:</p>
-        <div class="bg-garden-50 rounded-md px-3 py-2.5 font-serif italic text-center text-garden-800">ŵ = (XᵀX)⁻¹Xᵀy</div>
-        <a class="inline-block text-[12px] text-garden-600 hover:underline cursor-pointer">查看完整推导 →</a>
+  <div class="grid grid-cols-1 lg:grid-cols-[330px_minmax(0,1fr)] mt-6 gap-x-8 gap-y-6">
+    <div class="min-w-0">
+      <div class="pb-5 border-b hair">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-[15px] font-semibold">1. 先看最小必要推导</h3>
+          <span class="sect-label">3 步就够</span>
+        </div>
+        <div class="divide-y divide-slate-100 text-[13px]">
+          <div class="py-3">
+            <div class="text-[11px] text-slate-400 mb-1">Step 1</div>
+            <div class="font-medium">目标函数写成矩阵形式</div>
+            <div class="font-serif italic text-right mt-1">J(w) = ‖y − Xw‖²₂</div>
+          </div>
+          <div class="py-3">
+            <div class="text-[11px] text-slate-400 mb-1">Step 2</div>
+            <div class="font-medium">对参数求导并令导数为 0</div>
+            <div class="font-serif italic text-right mt-1">∇J(w) = -2Xᵀ(y - Xw) = 0</div>
+          </div>
+          <div class="py-3">
+            <div class="text-[11px] text-garden-700 mb-1">Step 3</div>
+            <div class="font-medium">得到正规方程并转成可实现形式</div>
+            <div class="font-serif italic text-right mt-1 text-garden-800">XᵀXw = Xᵀy  ⟹  ŵ = (XᵀX)⁻¹Xᵀy</div>
+          </div>
+          <div class="py-3 border-l-2 border-amber-400 pl-3">
+            <div class="font-medium text-amber-900">实现提醒</div>
+            <p class="text-[12px] text-amber-800 mt-1">如果想让模型学到截距项,需要先把输入改成 <code class="bg-amber-50 rounded px-1">X_b = [1, x]</code> 的形式,也就是补一列全 1。</p>
+          </div>
+        </div>
+      </div>
+      <div class="pt-5">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-[15px] font-semibold">2. 你要实现什么</h3>
+          <span class="sect-label">像做一个小型 ML coding task</span>
+        </div>
+        <div class="space-y-2.5 text-[13px]">
+          <div><span class="text-slate-400">函数签名</span><div class="font-mono text-[12px] mt-1 border-y hair bg-slate-50 px-3 py-2">linear_regression(X, y) -&gt; w</div></div>
+          <div><span class="text-slate-400">输入</span><div class="mt-1">二维特征矩阵 <code class="bg-slate-100 rounded px-1">X</code> 与目标向量 <code class="bg-slate-100 rounded px-1">y</code></div></div>
+          <div><span class="text-slate-400">输出</span><div class="mt-1">包含截距项和系数的参数向量 <code class="bg-slate-100 rounded px-1">w</code></div></div>
+          <div><span class="text-slate-400">检查点</span><div class="mt-1">是否补偏置列、矩阵乘法维度是否正确、结果是否能解释。</div></div>
+        </div>
       </div>
     </div>
-    <div class="lg:col-span-7 lg:pl-7 mt-6 lg:mt-0">
-      <div class="flex items-center justify-between mb-3">
-        <h3 class="text-[13px] font-semibold">可运行代码 (Python)</h3>
-        <button id="runBtn" class="text-[11px] bg-garden-600 hover:bg-garden-700 transition text-white rounded px-2 py-1">▷ 运行</button>
-      </div>
-      <pre class="bg-slate-900 text-slate-100 rounded-md p-3 text-[10.5px] leading-relaxed overflow-x-auto">import numpy as np
+    <div class="lg:border-l hair lg:pl-8 min-w-0">
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-[15px] font-semibold">3. 开始实现</h3>
+          <button id="runBtn" class="text-[12px] bg-garden-600 hover:bg-garden-700 transition text-white rounded-md px-3 py-1.5 focus-ring">▷ 运行参考结果</button>
+        </div>
+        <div class="min-w-0">
+          <div class="flex items-center justify-between gap-4 mb-1.5">
+            <div class="text-[12px] text-slate-500">Starter code</div>
+            <div class="hidden sm:block text-[11px] text-slate-400">长代码保留缩进,在代码区内滚动查看</div>
+          </div>
+          <pre class="code-scroll w-full bg-slate-900 text-slate-100 rounded-md p-4 font-mono text-[12px] leading-6">import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 
@@ -305,7 +449,26 @@ model = LinearRegression()
 model.fit(X, y)
 print("w =", model.coef_[0], "b =", model.intercept_)
 print("R² =", r2_score(y, model.predict(X)))</pre>
-      <svg viewBox="0 0 240 104" class="w-full mt-3 bg-slate-50 rounded-md">
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-x-5 gap-y-3 mt-4 pt-4 border-t hair text-[12px]">
+          <div>
+            <div class="text-[11px] text-slate-400">实现目标</div>
+            <div class="font-medium mt-1">写出和参考模型一致的参数估计</div>
+          </div>
+          <div class="md:border-l hair md:pl-5">
+            <div class="text-[11px] text-slate-400">样例提示</div>
+            <div class="text-[12px] text-slate-600 mt-1">如果结果没有截距项,你实现的是“过原点的直线”,不是完整线性回归。</div>
+          </div>
+          <div class="md:border-l hair md:pl-5">
+            <div class="text-[11px] text-slate-400">提交前自检</div>
+            <ul class="mt-2 text-[12px] space-y-1.5 list-disc list-inside text-slate-700">
+              <li>是否先构造了 <code class="bg-slate-100 rounded px-1">X_b</code></li>
+              <li>是否理解为什么要拼接一列 1</li>
+              <li>是否能解释 <code class="bg-slate-100 rounded px-1">XᵀXw = Xᵀy</code></li>
+            </ul>
+          </div>
+        </div>
+        <svg viewBox="0 0 240 104" class="w-full mt-4 bg-slate-50 rounded-md">
         <line x1="20" y1="88" x2="226" y2="20" stroke="#1f8a47" stroke-width="2"/>
         <g fill="#3b82f6">
           <circle cx="30" cy="82" r="2.4"/><circle cx="48" cy="76" r="2.4"/><circle cx="62" cy="74" r="2.4"/>
@@ -314,26 +477,26 @@ print("R² =", r2_score(y, model.predict(X)))</pre>
           <circle cx="168" cy="34" r="2.4"/><circle cx="184" cy="31" r="2.4"/><circle cx="200" cy="26" r="2.4"/>
           <circle cx="56" cy="69" r="2.4"/><circle cx="116" cy="59" r="2.4"/><circle cx="176" cy="39" r="2.4"/>
         </g>
-      </svg>
-      <div id="runOut" class="hidden mt-2 bg-slate-50 border hair rounded-md px-3 py-2 text-[12px] font-mono">w = 2.98　b = 4.07　R² = 0.95</div>
-    </div>
-  </div>
-
-  <div class="mt-7 pt-5 border-t hair">
-    <div class="flex items-baseline justify-between mb-3">
-      <h3 class="text-[13px] font-semibold">论文笔记</h3>
-      <a class="text-[12px] text-garden-600 hover:underline cursor-pointer">+ 关联论文</a>
-    </div>
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-9 gap-y-4">
-      <div class="lg:pr-9 lg:border-r hair">
-        <div class="font-medium">An Introduction to Statistical Learning</div>
-        <div class="text-[11px] text-slate-400 mt-0.5">G. James 等 · 2013 · 章节 3.1–3.3</div>
-        <p class="text-[12px] text-slate-500 mt-1">线性回归的基础概念与最小二乘估计。</p>
+        </svg>
+        <div id="runOut" class="hidden mt-3 bg-slate-50 border-y hair px-4 py-3 text-[12px] font-mono">w = 2.98　b = 4.07　R² = 0.95</div>
       </div>
-      <div>
-        <div class="font-medium">The Elements of Statistical Learning</div>
-        <div class="text-[11px] text-slate-400 mt-0.5">T. Hastie 等 · 2001 · 章节 3.2</div>
-        <p class="text-[12px] text-slate-500 mt-1">模型评估与偏差-方差权衡。</p>
+      <div class="mt-5 pt-5 border-t hair">
+        <div class="flex items-baseline justify-between mb-3">
+          <h3 class="text-[15px] font-semibold">延伸资料</h3>
+          <a class="text-[12px] text-garden-600 hover:underline cursor-pointer">+ 关联论文</a>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-4">
+          <div class="lg:pr-8 lg:border-r hair">
+            <div class="font-medium">An Introduction to Statistical Learning</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">G. James 等 · 2013 · 章节 3.1–3.3</div>
+            <p class="text-[12px] text-slate-500 mt-1">需要回到概念层面时再看,不要抢占训练主线。</p>
+          </div>
+          <div>
+            <div class="font-medium">The Elements of Statistical Learning</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">T. Hastie 等 · 2001 · 章节 3.2</div>
+            <p class="text-[12px] text-slate-500 mt-1">适合在实现后补充偏差-方差和模型诊断视角。</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -343,26 +506,27 @@ print("R² =", r2_score(y, model.predict(X)))</pre>
 <!-- 社区 Community -->
 <!-- ============================================================ -->
 <section id="screen-community" class="screen hidden py-6">
-  <h1 class="text-[16px] font-bold mb-3">公开社区</h1>
+  <h1 class="text-[18px] font-bold mb-1">训练成果社区</h1>
+  <p class="text-[12px] text-slate-500 mb-3">这里展示能复用的题解、推导、错因复盘和可运行实现。</p>
   <div class="flex items-center gap-5 border-b hair text-[13px]">
-    <button class="pb-2.5 border-b-2 border-garden-600 text-garden-700 font-semibold -mb-px">发现</button>
-    <button class="pb-2.5 text-slate-500">关注</button>
-    <button class="pb-2.5 text-slate-500">最新</button>
+    <button class="pb-2.5 border-b-2 border-garden-600 text-garden-700 font-semibold -mb-px">题解精选</button>
+    <button class="pb-2.5 text-slate-500">关注训练者</button>
+    <button class="pb-2.5 text-slate-500">最新提交</button>
   </div>
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-x-9">
-    <!-- 左:搜索 + 信息流 -->
-    <div class="lg:col-span-8">
+  <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_330px] gap-x-8">
+    <!-- 左:搜索 + 训练成果流 -->
+    <div class="min-w-0">
       <div class="flex items-center gap-3 py-4">
         <div class="flex-1 flex items-center gap-2 bg-slate-50 inp px-3 py-2 text-slate-400 text-[13px]">
-          <span>🔍</span><span>搜索公开内容、作者、标签…</span>
+          <span>🔍</span><span>搜索题解、实现、错因、公式…</span>
         </div>
         <button class="border hair rounded-md px-3.5 py-2 text-[13px] text-slate-600 whitespace-nowrap">⚲ 筛选</button>
       </div>
       <div id="feed" class="border-t hair"></div>
     </div>
-    <!-- 右:个人资料 + 标签热榜 -->
-    <div class="lg:col-span-4 mt-5 lg:mt-0 lg:border-l hair lg:pl-9">
-      <div class="text-center pt-1">
+    <!-- 右:个人资料 + 训练信号 -->
+    <div class="mt-8 lg:mt-8 lg:border-l hair lg:pl-8">
+      <div class="text-center pt-4">
         <div class="w-16 h-16 rounded-full bg-garden-100 text-garden-700 text-[22px] font-bold flex items-center justify-center mx-auto overflow-hidden relative">
           R<img src="avatar.jpg" alt="" onerror="this.remove()" class="absolute inset-0 w-full h-full object-cover" />
         </div>
@@ -371,13 +535,28 @@ print("R² =", r2_score(y, model.predict(X)))</pre>
         <p class="text-[12px] text-slate-500 mt-2 leading-relaxed">热爱机器学习与统计学,构建自己的知识体系。</p>
       </div>
       <div class="grid grid-cols-4 mt-4 py-3 border-y hair text-center">
-        <div><div class="font-bold text-[15px]">28</div><div class="text-[11px] text-slate-400">概念</div></div>
-        <div><div class="font-bold text-[15px]">16</div><div class="text-[11px] text-slate-400">实验</div></div>
-        <div><div class="font-bold text-[15px]">8</div><div class="text-[11px] text-slate-400">公开内容</div></div>
-        <div><div class="font-bold text-[15px]">128</div><div class="text-[11px] text-slate-400">关注者</div></div>
+        <div><div class="font-bold text-[15px] num">28</div><div class="text-[11px] text-slate-400">概念</div></div>
+        <div><div class="font-bold text-[15px] num">16</div><div class="text-[11px] text-slate-400">实验</div></div>
+        <div><div class="font-bold text-[15px] num">8</div><div class="text-[11px] text-slate-400">公开内容</div></div>
+        <div><div class="font-bold text-[15px] num">128</div><div class="text-[11px] text-slate-400">关注者</div></div>
       </div>
       <button class="mt-4 w-full border border-garden-600 text-garden-700 hover:bg-garden-50 transition rounded-md py-2 text-[12px] font-medium">✎ 编辑个人资料</button>
-      <h3 class="text-[14px] font-semibold mt-5 pt-4 border-t hair mb-1">标签热榜</h3>
+      <div class="py-4 border-b hair">
+        <h3 class="text-[14px] font-semibold mb-2">本周挑战</h3>
+        <div class="text-[13px] font-medium">用 NumPy 实现 5 个基础模型</div>
+        <p class="text-[12px] text-slate-500 mt-1">线性回归、逻辑回归、PCA、KNN、Softmax 分类器。</p>
+        <div class="mt-3 h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-garden-600" style="width:60%"></div></div>
+        <div class="text-[11px] text-slate-400 mt-1">已完成 3 / 5</div>
+      </div>
+      <div class="py-4 border-b hair">
+        <h3 class="text-[14px] font-semibold mb-2">热门错因</h3>
+        <div class="divide-y divide-slate-100 text-[12px]">
+          <div class="py-2 flex justify-between gap-3"><span>偏置项遗漏</span><span class="text-slate-400 num">47</span></div>
+          <div class="py-2 flex justify-between gap-3"><span>矩阵维度不匹配</span><span class="text-slate-400 num">39</span></div>
+          <div class="py-2 flex justify-between gap-3"><span>softmax 数值溢出</span><span class="text-slate-400 num">26</span></div>
+        </div>
+      </div>
+      <h3 class="text-[14px] font-semibold mt-4 mb-1">训练标签热榜</h3>
       <div id="tagRank"></div>
     </div>
   </div>
@@ -387,90 +566,126 @@ print("R² =", r2_score(y, model.predict(X)))</pre>
 <!-- 复习 Review -->
 <!-- ============================================================ -->
 <section id="screen-review" class="screen hidden py-6">
-  <div class="flex items-center justify-between pb-3 border-b hair mb-5">
-    <h1 class="text-[16px] font-bold">复习 <span class="text-slate-400 font-normal text-[13px]">间隔重复</span></h1>
-    <span class="text-[12px] text-slate-500">复习卡来自概念页的 <code class="bg-slate-100 rounded px-1">::card</code> 标记</span>
+  <div class="flex items-center justify-between pb-3 border-b hair mb-5 flex-wrap gap-2">
+    <div>
+      <h1 class="text-[22px] font-bold">代码纠错复习</h1>
+      <p class="text-[12px] text-slate-500 mt-1">这里不只是回忆概念,而是重新写一次你上次写错的实现。</p>
+    </div>
+    <span class="text-[12px] text-slate-500">复习对象来自你的错因记录和实现题提交结果</span>
   </div>
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-x-9">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-x-9 gap-y-6">
     <!-- 主复习区 -->
-    <div class="lg:col-span-8 lg:border-r hair lg:pr-9">
-      <div class="flex items-center justify-between text-[12px] text-slate-500 mb-2">
-        <span>今日队列 · 第 <b class="text-slate-700">1</b> / 6 张</span><span>代码卡 · 来自「线性回归」</span>
+    <div class="lg:col-span-8">
+      <div class="pb-5 border-b hair">
+        <div class="flex items-center justify-between text-[12px] text-slate-500 mb-2">
+          <span>今日纠错队列 · 第 <b class="text-slate-700">1</b> / 6 题</span><span>代码实现题 · 来自「线性回归」</span>
+        </div>
+        <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-garden-600 rounded-full" style="width:16%"></div></div>
       </div>
-      <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden mb-5"><div class="h-full bg-garden-600 rounded-full" style="width:16%"></div></div>
 
-      <!-- 题目 -->
-      <div class="text-[15px] font-medium leading-relaxed mb-1">用 NumPy 实现最小二乘的正规方程解 <code class="bg-slate-100 rounded px-1 text-[13px]">linear_regression(X, y)</code>。</div>
-      <p class="text-[12px] text-slate-500 mb-3">先自己写出实现,再与参考答案对比。</p>
-
-      <!-- 写代码 -->
-      <div class="flex items-center justify-between mb-1.5">
-        <span class="sect-label">你的实现</span>
-        <span class="text-[11px] text-slate-400">Python · 或 <a class="text-garden-600 cursor-pointer">上传 .py 文件</a></span>
+      <div class="py-5 border-b hair">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-x-7 gap-y-4">
+          <div class="lg:col-span-7">
+            <div class="sect-label mb-1.5">本题要纠正的错误</div>
+            <div class="text-[17px] font-semibold leading-relaxed">你上次直接用了 <code class="bg-slate-100 rounded px-1">X.T @ X</code>,但忘记给输入拼接偏置列,所以模型没有学到截距项。</div>
+          </div>
+          <div class="lg:col-span-5 lg:border-l hair lg:pl-6 text-[12px]">
+            <div class="sect-label mb-1.5">推导锚点</div>
+            <div class="space-y-1.5 text-slate-600">
+              <div>截距项转成一列常数 1</div>
+              <div>正规方程和矩阵维度对应</div>
+              <div>直接求逆的数值稳定风险</div>
+            </div>
+          </div>
+        </div>
       </div>
-      <textarea id="userCode" rows="8" class="inp w-full px-3 py-2.5 text-[12px] font-mono focus:outline-none focus:border-garden-600">import numpy as np
+
+      <div class="py-5">
+        <div class="text-[15px] font-medium leading-relaxed mb-1">重写这个函数: 用 NumPy 实现带偏置项的正规方程解 <code class="bg-slate-100 rounded px-1 text-[13px]">linear_regression(X, y)</code>。</div>
+        <p class="text-[12px] text-slate-500 mb-3">先自己修正,再和参考实现对比。对比结束后,再判断这次到底是“记住了”还是“只是看懂了”。</p>
+
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="sect-label">你的修正</span>
+          <span class="text-[11px] text-slate-400">Python · 或 <a class="text-garden-600 cursor-pointer">上传 .py 文件</a></span>
+        </div>
+        <textarea id="userCode" rows="9" class="inp w-full px-3 py-2.5 text-[12px] font-mono focus:outline-none focus:border-garden-600">import numpy as np
 
 def linear_regression(X, y):
     w = np.linalg.inv(X.T @ X) @ X.T @ y
     return w</textarea>
-      <button id="compareBtn" class="mt-3 bg-garden-600 hover:bg-garden-700 transition text-white text-[13px] font-medium rounded-md px-5 py-2">对比参考答案</button>
+        <div class="flex flex-wrap gap-2 mt-3">
+          <button id="compareBtn" class="bg-garden-600 hover:bg-garden-700 transition text-white text-[13px] font-medium rounded-md px-5 py-2 focus-ring">对比参考答案</button>
+          <button class="border hair hover:bg-slate-50 transition rounded-md px-4 py-2 text-[13px] focus-ring">查看推导提示</button>
+        </div>
 
-      <!-- 对比结果 -->
-      <div id="compareResult" class="hidden mt-5">
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <div class="sect-label mb-1.5">你的实现</div>
-            <pre id="userEcho" class="bg-slate-900 text-slate-100 rounded-md p-3 text-[11px] leading-relaxed overflow-x-auto h-[150px]"></pre>
-          </div>
-          <div>
-            <div class="sect-label mb-1.5">参考答案</div>
-            <pre class="bg-slate-900 text-slate-100 rounded-md p-3 text-[11px] leading-relaxed overflow-x-auto h-[150px]">import numpy as np
+        <div id="compareResult" class="hidden mt-5">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div>
+              <div class="sect-label mb-1.5">你的实现</div>
+              <pre id="userEcho" class="bg-slate-900 text-slate-100 rounded-md p-3 text-[11px] leading-relaxed overflow-x-auto h-[150px]"></pre>
+            </div>
+            <div>
+              <div class="sect-label mb-1.5">参考答案</div>
+              <pre class="bg-slate-900 text-slate-100 rounded-md p-3 text-[11px] leading-relaxed overflow-x-auto h-[150px]">import numpy as np
 
 def linear_regression(X, y):
     <span class="bg-garden-600/40 rounded">X_b = np.c_[np.ones((len(X),1)), X]</span>
     w = np.linalg.inv(X_b.T@X_b) @ X_b.T@y
     return w</pre>
+            </div>
           </div>
-        </div>
-        <div class="mt-3 border-l-2 border-amber-400 bg-amber-50 px-3 py-2 text-[12px] text-amber-800">
-          <b>差异</b>:你的实现缺少偏置列 <code class="bg-white/70 rounded px-1">np.c_[np.ones(...), X]</code>,模型将没有截距项 b,只能拟合过原点的直线。
-        </div>
-        <div class="grid grid-cols-3 gap-2 mt-4 text-[13px]">
-          <button class="border hair hover:bg-red-50 hover:border-red-200 transition rounded-md py-2.5">忘了<div class="text-[10px] text-slate-400">1 天后再现</div></button>
-          <button class="border hair hover:bg-amber-50 hover:border-amber-200 transition rounded-md py-2.5">勉强<div class="text-[10px] text-slate-400">3 天后再现</div></button>
-          <button class="border hair hover:bg-garden-50 hover:border-garden-200 transition rounded-md py-2.5">记得<div class="text-[10px] text-slate-400">7 天后再现</div></button>
+          <div class="mt-3 border-l-2 border-amber-400 bg-amber-50 px-3 py-3 text-[12px] text-amber-800">
+            <b>这次的关键错因</b>:你的实现缺少偏置列 <code class="bg-white/70 rounded px-1">np.c_[np.ones(...), X]</code>,模型将没有截距项 b,只能拟合过原点的直线。
+          </div>
+          <div class="mt-3 grid grid-cols-1 md:grid-cols-3 gap-2 text-[13px]">
+            <button class="border hair hover:bg-red-50 hover:border-red-200 transition rounded-md py-3 focus-ring">还不会<div class="text-[10px] text-slate-400">明天再做一次</div></button>
+            <button class="border hair hover:bg-amber-50 hover:border-amber-200 transition rounded-md py-3 focus-ring">看懂了<div class="text-[10px] text-slate-400">3 天后再检验</div></button>
+            <button class="border hair hover:bg-garden-50 hover:border-garden-200 transition rounded-md py-3 focus-ring">能写对<div class="text-[10px] text-slate-400">7 天后回放</div></button>
+          </div>
         </div>
       </div>
 
-      <!-- 今日队列 -->
-      <div class="mt-7 pt-5 border-t hair">
-        <h3 class="text-[14px] font-semibold mb-2">今日复习队列</h3>
+      <div class="pt-5 border-t hair">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-[15px] font-semibold">今日纠错队列</h3>
+          <span class="sect-label">按错因优先级排序</span>
+        </div>
         <div id="queue"></div>
       </div>
     </div>
 
     <!-- 统计侧栏 -->
-    <div class="lg:col-span-4 mt-6 lg:mt-0">
-      <h3 class="text-[14px] font-semibold mb-2.5">复习统计</h3>
-      <div class="grid grid-cols-2 gap-y-3 pb-4 border-b hair">
-        <div><div class="text-[19px] font-bold">6</div><div class="text-[11px] text-slate-400">今日待复习</div></div>
-        <div><div class="text-[19px] font-bold">34</div><div class="text-[11px] text-slate-400">本周已复习</div></div>
-        <div><div class="text-[19px] font-bold text-garden-600">82%</div><div class="text-[11px] text-slate-400">本周正确率</div></div>
-        <div><div class="text-[19px] font-bold">156</div><div class="text-[11px] text-slate-400">累计卡片</div></div>
+    <div class="lg:col-span-4 lg:border-l hair lg:pl-8">
+      <div class="pb-5 border-b hair">
+        <h3 class="text-[15px] font-semibold mb-2.5">本轮纠错目标</h3>
+        <div class="grid grid-cols-2 gap-y-3 pb-4 border-b hair">
+          <div><div class="text-[21px] font-bold num">6</div><div class="text-[11px] text-slate-400">今日待纠错</div></div>
+          <div><div class="text-[21px] font-bold num">34</div><div class="text-[11px] text-slate-400">本周已回放</div></div>
+          <div><div class="text-[21px] font-bold text-garden-600 num">82%</div><div class="text-[11px] text-slate-400">最近修正成功率</div></div>
+          <div><div class="text-[21px] font-bold num">3</div><div class="text-[11px] text-slate-400">重复错误点</div></div>
+        </div>
+        <h3 class="text-[15px] font-semibold mt-4 mb-3">错误类型分布</h3>
+        <div id="mastery" class="space-y-2.5 pb-4 border-b hair"></div>
+        <h3 class="text-[15px] font-semibold mt-4 mb-3">最近 7 天回放量</h3>
+        <div class="flex items-end gap-1.5 h-14">
+          <div class="flex-1 bg-garden-200 rounded-sm" style="height:55%"></div>
+          <div class="flex-1 bg-garden-200 rounded-sm" style="height:80%"></div>
+          <div class="flex-1 bg-garden-200 rounded-sm" style="height:35%"></div>
+          <div class="flex-1 bg-garden-500 rounded-sm" style="height:95%"></div>
+          <div class="flex-1 bg-garden-500 rounded-sm" style="height:70%"></div>
+          <div class="flex-1 bg-garden-200 rounded-sm" style="height:60%"></div>
+          <div class="flex-1 bg-slate-100 rounded-sm" style="height:25%"></div>
+        </div>
+        <div class="flex justify-between text-[10px] text-slate-300 mt-1"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
       </div>
-      <h3 class="text-[14px] font-semibold mt-4 mb-3">掌握度分布</h3>
-      <div id="mastery" class="space-y-2.5 pb-4 border-b hair"></div>
-      <h3 class="text-[14px] font-semibold mt-4 mb-3">近 7 天复习量</h3>
-      <div class="flex items-end gap-1.5 h-14">
-        <div class="flex-1 bg-garden-200 rounded-sm" style="height:55%"></div>
-        <div class="flex-1 bg-garden-200 rounded-sm" style="height:80%"></div>
-        <div class="flex-1 bg-garden-200 rounded-sm" style="height:35%"></div>
-        <div class="flex-1 bg-garden-500 rounded-sm" style="height:95%"></div>
-        <div class="flex-1 bg-garden-500 rounded-sm" style="height:70%"></div>
-        <div class="flex-1 bg-garden-200 rounded-sm" style="height:60%"></div>
-        <div class="flex-1 bg-slate-100 rounded-sm" style="height:25%"></div>
+      <div class="pt-5">
+        <h3 class="text-[15px] font-semibold mb-2.5">这题对应的推导锚点</h3>
+        <div class="text-[12px] divide-y divide-slate-100">
+          <div class="py-2">为什么截距项要转成一列常数 1</div>
+          <div class="py-2">正规方程和矩阵维度如何对应</div>
+          <div class="py-2">什么时候不能直接求逆,需要更稳的解法</div>
+        </div>
       </div>
-      <div class="flex justify-between text-[10px] text-slate-300 mt-1"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
     </div>
   </div>
 </section>
@@ -530,47 +745,51 @@ document.addEventListener('click', e => {
 const cDone = t => `<div class="flex items-center gap-2.5 py-[5px]"><span class="w-[15px] h-[15px] rounded bg-garden-600 text-white text-[10px] flex items-center justify-center shrink-0">✓</span><span class="text-slate-400 line-through">${t}</span></div>`;
 const cTodo = t => `<div class="flex items-center gap-2.5 py-[5px]"><span class="w-[15px] h-[15px] rounded border-2 border-slate-200 shrink-0"></span><span class="text-slate-600">${t}</span></div>`;
 document.getElementById('route').innerHTML =
-  cDone('线性回归的直观理解') + cDone('最小二乘推导') + cDone('线性回归的矩阵形式') +
-  `<div class="flex items-center gap-2.5 py-[5px]"><span class="w-[15px] h-[15px] rounded border-2 border-garden-600 flex items-center justify-center shrink-0"><span class="w-[5px] h-[5px] bg-garden-600 rounded-[1px]"></span></span><span class="font-medium text-garden-700">梯度下降求解法</span><span class="text-[10px] text-garden-600 border border-garden-600/30 rounded px-1">进行中</span></div>` +
-  cTodo('正则化(Ridge / Lasso)') + cTodo('评估指标(RMSE / R²)') + cTodo('模型诊断与残差分析');
-document.getElementById('todo').innerHTML = cDone('完成矩阵形式推导') + cTodo('实现线性回归(NumPy)') + cTodo('阅读 ISLR 第 3 章');
+  cDone('推导目标函数与梯度') + cDone('写出正规方程') +
+  `<div class="flex items-center gap-2.5 py-[5px]"><span class="w-[15px] h-[15px] rounded border-2 border-garden-600 flex items-center justify-center shrink-0"><span class="w-[5px] h-[5px] bg-garden-600 rounded-[1px]"></span></span><span class="font-medium text-garden-700">补偏置列并实现正规方程</span><span class="text-[10px] text-garden-600 border border-garden-600/30 rounded px-1">当前</span></div>` +
+  cTodo('对照参考解定位差异') + cTodo('解释错因并记录回放') + cTodo('切换到梯度下降实现');
+document.getElementById('todo').innerHTML = cDone('完成 3 步推导预热') + cTodo('修正最小二乘实现中的偏置项') + cTodo('完成一次错因回放');
 document.getElementById('recent').innerHTML = [
-  ['线性回归','2 小时前',true],['多元线性回归','1 天前',false],['岭回归(Ridge)','2 天前',true],
-  ['逻辑回归','3 天前',false],['损失函数与优化','3 天前',true],
+  ['线性回归 · 偏置项实现','12 分钟前',true],['最小二乘法 · 正规方程','昨天',false],['岭回归 · 矩阵推导','2 天前',true],
+  ['逻辑回归 · Sigmoid 实现','3 天前',false],['损失函数与优化 · 梯度检查','3 天前',true],
 ].map(([t,time,p]) =>
   `<div class="flex items-center gap-2 py-[6px] border-b hair last:border-0 cursor-pointer hover:text-garden-700" data-goto="concept">
     <span class="flex-1 font-medium truncate">${t}</span>
-    <span class="text-[11px] ${p?'text-garden-600':'text-slate-400'}">${p?'公开':'私有'}</span>
+    <span class="text-[11px] ${p?'text-garden-600':'text-slate-400'}">${p?'已过关':'待回放'}</span>
     <span class="text-[11px] text-slate-400 w-[52px] text-right">${time}</span></div>`).join('');
 
-/* 社区信息流(卡片式,对齐参考图) */
+/* 社区信息流 */
 document.getElementById('feed').innerHTML = [
-  ['Alice','从零推导 Softmax 与交叉熵梯度','详细推导 Softmax + Cross Entropy 的梯度,并给出数值稳定实现。',['深度学习','推导','Softmax'],24,6,'2 小时前'],
-  ['Bob','Transformer 中的多头注意力机制','结合代码与可视化,理解多头注意力的计算过程。',['Transformer','注意力机制'],31,9,'5 小时前'],
-  ['Catherine','贝叶斯定理的直观理解与应用','通过生活中的例子理解贝叶斯定理,并在分类问题中应用。',['概率统计','贝叶斯'],16,3,'昨天'],
-  ['David','PPO 的 Clip 目标到底在裁剪什么','从策略梯度出发,讲清 PPO 为什么要对概率比做裁剪。',['强化学习','PPO'],42,11,'2 天前'],
-].map(([a,t,d,tags,like,cm,time]) =>
-  `<div class="flex justify-between gap-4 py-4 border-b hair">
+  ['Alice','题解','Softmax + 交叉熵梯度的稳定实现','从 logits 平移开始推导,给出 NumPy 版 forward / backward,并记录一次维度错误。',['含推导','可运行','错因复盘'],'Python','93%','中等',24,6,'2 小时前'],
+  ['Bob','实现','Transformer 多头注意力的最小实现','只保留 Q/K/V 投影、mask 和 scaled dot-product,适合对照矩阵维度。',['含代码','维度检查','可运行'],'PyTorch','88%','偏难',31,9,'5 小时前'],
+  ['Catherine','推导','贝叶斯分类器从公式到代码','用一个二分类样例解释先验、似然、后验,并实现朴素贝叶斯预测。',['含推导','小样例','公式到代码'],'Python','79%','入门',16,3,'昨天'],
+  ['David','错因复盘','PPO Clip 目标到底裁剪了什么','对比两次错误实现,解释概率比、优势函数和 clip 区间的关系。',['错因复盘','强化学习','含图解'],'Python','72%','偏难',42,11,'2 天前'],
+].map(([a,type,t,d,tags,lang,pass,difficulty,like,cm,time]) =>
+  `<div class="py-4 border-b hair">
     <div class="flex-1 min-w-0">
-      <div class="font-semibold text-[14px] hover:text-garden-700 cursor-pointer" data-goto="concept">${t}</div>
+      <div class="flex items-center gap-2 flex-wrap">
+        <span class="text-[11px] text-garden-700 bg-garden-50 border border-garden-100 rounded px-1.5 py-0.5">${type}</span>
+        <div class="font-semibold text-[14px] hover:text-garden-700 cursor-pointer" data-goto="concept">${t}</div>
+      </div>
       <p class="text-[12px] text-slate-500 mt-1">${d}</p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-1 mt-2 text-[11px] text-slate-500">
+        <span>语言 <b class="text-slate-700">${lang}</b></span>
+        <span>通过率 <b class="text-slate-700 num">${pass}</b></span>
+        <span>难度 <b class="text-slate-700">${difficulty}</b></span>
+        <span>作者 <b class="text-slate-700">${a}</b> · ${time}</span>
+      </div>
       <div class="flex flex-wrap items-center gap-1.5 mt-2">
         ${tags.map(x=>`<span class="bg-slate-100 rounded px-2 py-0.5 text-[11px] text-slate-500">${x}</span>`).join('')}
       </div>
       <div class="flex items-center gap-4 mt-2 text-[12px] text-slate-400">
-        <span>👍 ${like}</span><span>💬 ${cm}</span>
+        <span>收藏 ${like}</span><span>反馈 ${cm}</span>
       </div>
-    </div>
-    <div class="flex items-start gap-2 shrink-0">
-      <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 text-[12px] font-bold flex items-center justify-center">${a[0]}</div>
-      <div class="text-[12px] leading-tight"><div class="font-medium">${a}</div><div class="text-slate-400 text-[11px] mt-0.5">${time}</div></div>
-      <span class="text-[11px] text-garden-700 bg-garden-50 border border-garden-100 rounded px-1.5 py-0.5">公开</span>
     </div>
   </div>`).join('');
 
 /* 标签热榜 */
 document.getElementById('tagRank').innerHTML = [
-  ['强化学习',128],['Transformer',96],['梯度下降',85],['概率统计',74],['正则化',63],
+  ['正规方程',128],['梯度检查',96],['数值稳定',85],['矩阵维度',74],['偏置项',63],
 ].map(([t,n],i) =>
   `<div class="flex items-center gap-2 py-[6px] text-[12px] border-b hair last:border-0">
     <span class="w-4 ${i<3?'font-bold text-garden-600':'text-slate-400'}">${i+1}</span>
@@ -578,23 +797,23 @@ document.getElementById('tagRank').innerHTML = [
 
 /* 复习队列 */
 document.getElementById('queue').innerHTML = [
-  ['代码卡','线性回归 · 正规方程实现','当前'],['公式卡','交叉熵的定义','待复习'],
-  ['概念卡','偏差-方差权衡','待复习'],['公式卡','梯度下降更新公式','待复习'],
-  ['代码卡','PCA 的 NumPy 实现','待复习'],['概念卡','L1 与 L2 正则化的区别','待复习'],
+  ['代码纠错','线性回归 · 偏置项遗漏','当前'],['推导回放','交叉熵梯度展开','待复习'],
+  ['代码纠错','梯度下降 · 学习率更新顺序','待复习'],['推导回放','R² 的定义与解释','待复习'],
+  ['代码纠错','PCA · 中心化遗漏','待复习'],['推导回放','L1 与 L2 惩罚项差异','待复习'],
 ].map(([type,t,st],i) =>
   `<div class="flex items-center gap-2.5 py-2 border-b hair last:border-0">
     <span class="w-5 text-[11px] text-slate-300">${i+1}</span>
-    <span class="text-[10px] rounded px-1.5 py-0.5 ${type==='代码卡'?'bg-blue-50 text-blue-600':type==='公式卡'?'bg-violet-50 text-violet-600':'bg-amber-50 text-amber-600'}">${type}</span>
+    <span class="text-[10px] rounded px-1.5 py-0.5 ${type==='代码纠错'?'bg-blue-50 text-blue-600':'bg-violet-50 text-violet-600'}">${type}</span>
     <span class="flex-1 ${st==='当前'?'font-medium':'text-slate-600'}">${t}</span>
     <span class="text-[11px] ${st==='当前'?'text-garden-600 font-medium':'text-slate-400'}">${st}</span>
   </div>`).join('');
 
 /* 掌握度分布 */
 document.getElementById('mastery').innerHTML = [
-  ['已掌握',92,'#1f8a47'],['学习中',48,'#f59e0b'],['新卡片',16,'#94a3b8'],
+  ['偏置项/截距处理',3,'#1f8a47'],['矩阵维度与转置',5,'#f59e0b'],['评估指标理解',2,'#94a3b8'],
 ].map(([t,n,c]) => `<div>
     <div class="flex justify-between text-[12px] mb-1"><span>${t}</span><span class="text-slate-400">${n}</span></div>
-    <div class="h-2 bg-slate-100 rounded-full overflow-hidden"><div class="h-full rounded-full" style="width:${Math.round(n/156*100)}%;background:${c}"></div></div>
+    <div class="h-2 bg-slate-100 rounded-full overflow-hidden"><div class="h-full rounded-full" style="width:${Math.min(100, n * 18)}%;background:${c}"></div></div>
   </div>`).join('');
 
 /* 复习:对比答案 */
