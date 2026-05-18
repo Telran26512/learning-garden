@@ -10,9 +10,9 @@ AI Learning Garden 需要前后端独立部署,并让前端与后端的学习路
 
 采用三个仓库:
 
-1. `ai-learning-garden` 或 `ai-learning-garden-docs`:项目总控与文档仓。
-2. `ai-learning-garden-web`:Next.js 前端应用仓。
-3. `ai-learning-garden-api`:Go 模块化单体后端仓。
+1. `learning-garden`:项目总控与文档仓。
+2. `learning-garden-web`:Next.js 前端应用仓。
+3. `learning-garden-server`:Go 模块化单体后端仓。
 
 这只是仓库与发布边界的拆分,不改变运行时架构:
 

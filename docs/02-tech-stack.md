@@ -57,9 +57,9 @@
 
 仓库拆分后的归属:
 
-- `ai-learning-garden-web`:Next.js 应用、前端 CI、Vercel 部署。
-- `ai-learning-garden-api`:Go 模块化单体、数据库迁移、REST 契约、容器部署。
-- `ai-learning-garden` / `ai-learning-garden-docs`:架构文档、路线图、规范、跨仓联调说明。
+- `learning-garden-web`:Next.js 应用、前端 CI、Vercel 部署。
+- `learning-garden-server`:Go 模块化单体、数据库迁移、REST 契约、容器部署。
+- `learning-garden`:架构文档、路线图、规范、跨仓联调说明。
 
 代价是失去单仓原子提交,需要通过显式 REST 契约与跨仓联调文档控制变更。
 

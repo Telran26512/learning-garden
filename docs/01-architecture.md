@@ -36,12 +36,12 @@
 
 ```mermaid
 flowchart TB
-    subgraph DocsRepo["ai-learning-garden / ai-learning-garden-docs"]
+    subgraph DocsRepo["learning-garden"]
         Docs["docs/:架构、路线图、规范、数据模型"]
         Setup["跨仓联调说明与 API 契约引用"]
     end
 
-    subgraph WebRepo["ai-learning-garden-web"]
+    subgraph WebRepo["learning-garden-web"]
         Web["Next.js 单应用"]
         Routes["route groups:(community)/(workspace)/(studio)/(admin)"]
         ApiClient["lib/api:REST client"]
@@ -51,7 +51,7 @@ flowchart TB
         Web --> Runtime
     end
 
-    subgraph ApiRepo["ai-learning-garden-api"]
+    subgraph ApiRepo["learning-garden-server"]
         Api["Go 模块化单体"]
         Contract["api/openapi.yaml 或端点文档"]
         Migrations["migrations/ + queries/ + sqlc"]
@@ -99,8 +99,8 @@ flowchart TB
 
 仓库边界与运行单元保持一致但不改变架构:
 
-- `ai-learning-garden-web` 持有 `web` 源码与前端部署配置。
-- `ai-learning-garden-api` 持有 `api` 源码、数据库迁移、SQL 查询、API 契约与后端部署配置。
+- `learning-garden-web` 持有 `web` 源码与前端部署配置。
+- `learning-garden-server` 持有 `api` 源码、数据库迁移、SQL 查询、API 契约与后端部署配置。
 - 当前文档仓持有跨仓架构、规范、路线图与本地联调说明。
 - `web` 不依赖 `api` 源码,只依赖 REST 契约与环境变量配置的 API 地址。
 

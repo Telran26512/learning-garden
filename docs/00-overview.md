@@ -34,9 +34,9 @@
 
 仓库采用 **multi-repo**:
 
-- `ai-learning-garden` / `ai-learning-garden-docs`:项目总控与文档仓,维护架构、路线图、规范、数据模型、跨仓联调说明。
-- `ai-learning-garden-web`:前端代码仓,维护 Next.js 单应用,独立部署到 Vercel。
-- `ai-learning-garden-api`:后端代码仓,维护 Go 模块化单体、数据库迁移与 API 契约,独立部署为容器服务。
+- `learning-garden`:项目总控与文档仓,维护架构、路线图、规范、数据模型、跨仓联调说明。
+- `learning-garden-web`:前端代码仓,维护 Next.js 单应用,独立部署到 Vercel。
+- `learning-garden-server`:后端代码仓,维护 Go 模块化单体、数据库迁移与 API 契约,独立部署为容器服务。
 
 拆仓只改变工程仓库与发布边界,不改变系统架构:`web` 仍是一个前端应用,`api` 仍是一个模块化单体,二者只通过 REST `/api/v1` 通信。
 

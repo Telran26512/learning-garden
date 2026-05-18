@@ -9,7 +9,7 @@
 ### 1.1 项目总控 / 文档仓
 
 ```text
-ai-learning-garden/ 或 ai-learning-garden-docs/
+learning-garden/
 ├── docs/
 │   ├── 00-overview.md
 │   ├── 01-architecture.md
@@ -22,10 +22,10 @@ ai-learning-garden/ 或 ai-learning-garden-docs/
 
 职责:维护架构、路线图、规范、数据模型、跨仓联调说明和 API 契约引用。不放应用源码。
 
-### 1.2 `ai-learning-garden-web`
+### 1.2 `learning-garden-web`
 
 ```text
-ai-learning-garden-web/
+learning-garden-web/
 ├── app/
 │   ├── (community)/              # 社区:发现、浏览他人、讨论、用户主页
 │   ├── (workspace)/              # 登录后:我的学习空间(8 个学习模块)
@@ -41,10 +41,10 @@ ai-learning-garden-web/
 
 `web` 仓只通过 REST 契约和 API base URL 访问后端,不得依赖 `api` 仓源码。浏览器侧 API 地址使用 `NEXT_PUBLIC_API_BASE_URL`;服务端组件或 server action 如需直接调用后端,使用服务端专用环境变量。
 
-### 1.3 `ai-learning-garden-api`
+### 1.3 `learning-garden-server`
 
 ```text
-ai-learning-garden-api/
+learning-garden-server/
 ├── cmd/server/                   # 入口 main
 ├── internal/
 │   ├── identity/                 # 每个领域模块内含 handler/service/repository/domain

@@ -4,8 +4,8 @@ Project control and documentation repository for AI Learning Garden.
 
 This repository keeps the architecture, roadmap, conventions, data model, and cross-repository coordination notes. Application source code lives in separate repositories:
 
-- `ai-learning-garden-web`: Next.js frontend.
-- `ai-learning-garden-api`: Go backend API.
+- [`learning-garden-web`](https://github.com/Telran26512/learning-garden-web): Next.js frontend.
+- [`learning-garden-server`](https://github.com/Telran26512/learning-garden-server): Go backend server.
 
 Start with the documents in this order:
 
