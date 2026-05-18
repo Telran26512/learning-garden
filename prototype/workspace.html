@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Learning Garden — 工作台</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      colors: { garden: { 600:'#1f8a47', 700:'#176b38' } },
+      fontFamily: { sans: ['-apple-system','BlinkMacSystemFont','"PingFang SC"','"Microsoft YaHei"','Segoe UI','sans-serif'] },
+    } },
+  };
+</script>
+<style>
+  body { background:#ffffff; color:#1f2328; }
+  .hair { border-color:#ebedef; }
+  .sect-label { font-size:12px; letter-spacing:.04em; color:#6b7280; }
+  ::-webkit-scrollbar { width:0; height:0; }
+  .hm-cell { width:11px; height:11px; border-radius:2px; }
+</style>
+</head>
+<body class="font-sans text-[13px] leading-normal">
+
+<div class="max-w-[1060px] mx-auto px-7 py-6">
+
+  <!-- 顶部:行内数据条(替代欢迎语) -->
+  <div class="flex items-center justify-between flex-wrap gap-y-2">
+    <div class="flex items-center divide-x divide-slate-200 text-[13px]">
+      <div class="pr-4">
+        <span class="text-slate-500">总体进度</span>
+        <span class="font-semibold ml-1.5">62%</span>
+        <span class="text-garden-600 ml-1">▲8%</span>
+      </div>
+      <div class="px-4">
+        <span class="text-slate-500">掌握概念</span>
+        <span class="font-semibold ml-1.5">28<span class="text-slate-400 font-normal">/45</span></span>
+      </div>
+      <div class="px-4">
+        <span class="text-slate-500">完成实验</span>
+        <span class="font-semibold ml-1.5">16</span>
+      </div>
+      <div class="px-4">
+        <span class="text-slate-500">公开内容</span>
+        <span class="font-semibold ml-1.5">8</span>
+      </div>
+      <div class="pl-4">
+        <span class="text-slate-500">🔥 连续</span>
+        <span class="font-semibold ml-1">12 天</span>
+      </div>
+    </div>
+    <button class="bg-garden-600 hover:bg-garden-700 transition text-white text-[13px] font-medium rounded-md px-3.5 py-1.5">
+      + 新建内容
+    </button>
+  </div>
+
+  <!-- 学习打卡:GitHub 式热力图 -->
+  <div class="mt-6 pt-5 border-t hair">
+    <div class="flex items-baseline justify-between mb-3">
+      <h2 class="text-[14px] font-semibold">学习打卡</h2>
+      <span class="sect-label">过去一年 <span id="totalDays" class="text-slate-700 font-medium"></span> 天有学习记录</span>
+    </div>
+    <div class="flex gap-2">
+      <!-- 星期标签 -->
+      <div class="flex flex-col justify-between pt-[18px] pb-[2px] text-[10px] text-slate-400 shrink-0">
+        <span>一</span><span>三</span><span>五</span>
+      </div>
+      <div class="overflow-x-auto">
+        <div id="months" class="flex text-[10px] text-slate-400 mb-1 h-[14px]"></div>
+        <div id="heatmap" class="flex gap-[3px]"></div>
+      </div>
+    </div>
+    <div class="flex items-center justify-end gap-1.5 mt-2.5 text-[10px] text-slate-400">
+      <span>少</span>
+      <span class="hm-cell" style="background:#ebedf0"></span>
+      <span class="hm-cell" style="background:#9be9a8"></span>
+      <span class="hm-cell" style="background:#40c463"></span>
+      <span class="hm-cell" style="background:#30a14e"></span>
+      <span class="hm-cell" style="background:#216e39"></span>
+      <span>多</span>
+    </div>
+  </div>
+
+  <!-- 主体:两栏密排,无卡片 -->
+  <div class="mt-5 pt-5 border-t hair grid grid-cols-1 lg:grid-cols-12 gap-x-9 gap-y-6">
+
+    <!-- 左栏 -->
+    <div class="lg:col-span-7">
+
+      <!-- 当前任务 -->
+      <div class="flex items-baseline justify-between mb-2.5">
+        <h2 class="text-[14px] font-semibold">当前任务</h2>
+        <span class="sect-label">Stage 2 · 线性模型与回归 · Week 3/4</span>
+      </div>
+      <div class="flex items-center gap-3 mb-1">
+        <span class="text-[14px] font-medium flex-1">推导最小二乘法的矩阵解</span>
+        <a class="text-[12px] text-garden-600 font-medium whitespace-nowrap hover:underline">继续学习 →</a>
+      </div>
+      <p class="text-slate-500 text-[12px] mb-2">从代价函数出发,推导 ŵ = (XᵀX)⁻¹Xᵀy,并理解其几何意义。</p>
+      <div class="flex items-center gap-2.5">
+        <div class="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+          <div class="h-full bg-garden-600 rounded-full" style="width:60%"></div>
+        </div>
+        <span class="text-[11px] text-slate-400">60%</span>
+      </div>
+
+      <!-- 学习路线 -->
+      <div class="flex items-baseline justify-between mt-6 mb-2">
+        <h2 class="text-[14px] font-semibold">学习路线</h2>
+        <span class="sect-label">3 / 7 已完成 · <a class="text-garden-600 hover:underline">完整路线</a></span>
+      </div>
+      <div id="route" class="text-[13px]"></div>
+    </div>
+
+    <!-- 右栏 -->
+    <div class="lg:col-span-5">
+
+      <!-- 今日复习 -->
+      <div class="flex items-center justify-between pb-3 mb-3 border-b hair">
+        <div>
+          <div class="text-[14px] font-semibold">今日复习</div>
+          <div class="text-[12px] text-slate-500 mt-0.5">6 张卡片到期待复习</div>
+        </div>
+        <a class="text-[12px] bg-amber-100 hover:bg-amber-200 transition text-amber-800 font-medium rounded-md px-3 py-1.5">开始复习</a>
+      </div>
+
+      <!-- 今日计划 -->
+      <h2 class="text-[14px] font-semibold mb-2">今日计划</h2>
+      <div id="todo" class="text-[13px] mb-5"></div>
+
+      <!-- 最近概念 -->
+      <div class="flex items-baseline justify-between mb-2 pt-4 border-t hair">
+        <h2 class="text-[14px] font-semibold">最近概念</h2>
+        <span class="sect-label"><a class="text-garden-600 hover:underline">全部</a></span>
+      </div>
+      <div id="recent" class="text-[13px]"></div>
+    </div>
+  </div>
+
+  <p class="text-center text-[11px] text-slate-300 mt-9">AI Learning Garden · 工作台原型 v3 · 仅为视觉稿</p>
+</div>
+
+<script>
+/* ---------- 热力图 ---------- */
+(function () {
+  const WEEKS = 53, today = new Date(2026, 4, 18);
+  const total = WEEKS * 7;
+  let start = new Date(today);
+  start.setDate(start.getDate() - (total - 1));
+  start.setDate(start.getDate() - start.getDay()); // 对齐到周日
+  const colors = ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39'];
+  const hm = document.getElementById('heatmap');
+  const monthsEl = document.getElementById('months');
+  const monthNames = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  let studyDays = 0, lastMonth = -1;
+
+  for (let w = 0; w < WEEKS; w++) {
+    const col = document.createElement('div');
+    col.className = 'flex flex-col gap-[3px]';
+    const firstDay = new Date(start);
+    firstDay.setDate(start.getDate() + w * 7);
+    // 月份标签
+    const mLabel = document.createElement('div');
+    mLabel.style.width = '14px'; mLabel.style.minWidth = '14px';
+    if (firstDay.getMonth() !== lastMonth && firstDay.getDate() <= 7) {
+      mLabel.textContent = monthNames[firstDay.getMonth()];
+      mLabel.style.minWidth = '30px';
+      lastMonth = firstDay.getMonth();
+    }
+    monthsEl.appendChild(mLabel);
+
+    for (let d = 0; d < 7; d++) {
+      const date = new Date(start);
+      date.setDate(start.getDate() + w * 7 + d);
+      const cell = document.createElement('div');
+      cell.className = 'hm-cell';
+      if (date > today) {
+        cell.style.background = 'transparent';
+      } else {
+        // 加权随机:多数有学习,偶尔空缺
+        const r = Math.random();
+        let lvl = r < 0.18 ? 0 : r < 0.4 ? 1 : r < 0.68 ? 2 : r < 0.88 ? 3 : 4;
+        cell.style.background = colors[lvl];
+        if (lvl > 0) studyDays++;
+        cell.title = (date.getMonth() + 1) + '月' + date.getDate() + '日';
+      }
+      col.appendChild(cell);
+    }
+    hm.appendChild(col);
+  }
+  document.getElementById('totalDays').textContent = studyDays;
+})();
+
+/* ---------- 学习路线 ---------- */
+(function () {
+  const items = [
+    ['线性回归的直观理解', 'done'],
+    ['最小二乘推导', 'done'],
+    ['线性回归的矩阵形式', 'done'],
+    ['梯度下降求解法', 'doing'],
+    ['正则化(Ridge / Lasso)', 'todo'],
+    ['评估指标(RMSE / R²)', 'todo'],
+    ['模型诊断与残差分析', 'todo'],
+  ];
+  document.getElementById('route').innerHTML = items.map(([t, s]) => {
+    if (s === 'done')
+      return `<div class="flex items-center gap-2.5 py-[5px]">
+        <span class="w-[15px] h-[15px] rounded bg-garden-600 text-white text-[10px] flex items-center justify-center shrink-0">✓</span>
+        <span class="text-slate-400 line-through">${t}</span></div>`;
+    if (s === 'doing')
+      return `<div class="flex items-center gap-2.5 py-[5px]">
+        <span class="w-[15px] h-[15px] rounded border-2 border-garden-600 flex items-center justify-center shrink-0">
+          <span class="w-[5px] h-[5px] bg-garden-600 rounded-[1px]"></span></span>
+        <span class="font-medium text-garden-700">${t}</span>
+        <span class="text-[10px] text-garden-600 border border-garden-600/30 rounded px-1">进行中</span></div>`;
+    return `<div class="flex items-center gap-2.5 py-[5px]">
+      <span class="w-[15px] h-[15px] rounded border-2 border-slate-200 shrink-0"></span>
+      <span class="text-slate-500">${t}</span></div>`;
+  }).join('');
+})();
+
+/* ---------- 今日计划 ---------- */
+(function () {
+  const items = [['完成矩阵形式推导', true], ['实现线性回归(NumPy)', false], ['阅读 ISLR 第 3 章', false]];
+  document.getElementById('todo').innerHTML = items.map(([t, done]) =>
+    done
+      ? `<div class="flex items-center gap-2.5 py-[5px]">
+          <span class="w-[15px] h-[15px] rounded bg-garden-600 text-white text-[10px] flex items-center justify-center shrink-0">✓</span>
+          <span class="text-slate-400 line-through">${t}</span></div>`
+      : `<div class="flex items-center gap-2.5 py-[5px]">
+          <span class="w-[15px] h-[15px] rounded border-2 border-slate-200 shrink-0"></span>
+          <span>${t}</span></div>`
+  ).join('');
+})();
+
+/* ---------- 最近概念 ---------- */
+(function () {
+  const items = [
+    ['线性回归', '2 小时前', true],
+    ['多元线性回归', '1 天前', false],
+    ['岭回归(Ridge)', '2 天前', true],
+    ['逻辑回归', '3 天前', false],
+    ['损失函数与优化', '3 天前', true],
+  ];
+  document.getElementById('recent').innerHTML = items.map(([t, time, pub]) =>
+    `<div class="flex items-center gap-2 py-[6px] border-b hair last:border-0">
+      <span class="flex-1 font-medium truncate">${t}</span>
+      <span class="text-[11px] ${pub ? 'text-garden-600' : 'text-slate-400'}">${pub ? '公开' : '私有'}</span>
+      <span class="text-[11px] text-slate-400 w-[52px] text-right">${time}</span>
+    </div>`
+  ).join('');
+})();
+</script>
+
+</body>
+</html>
